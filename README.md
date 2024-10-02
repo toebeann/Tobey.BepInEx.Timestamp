@@ -14,7 +14,7 @@ By default, it does this by contacting a remote endpoint (http://google.com) and
 
 ### Why contact a remote endpoint for the timestamp? Every computer has a system clock, so why not just use it?
 
-In a perfect world we could depend upon the validity of the system clock, however sometimes users have system clocks which are incorrectly set for a variety of reasons. For example, some users manually change their system clock to artificially extend the length of free software trials. My opinion is that a false timestamp in the logs is more harmful than no timestamp at all, potentially leading to wasted time for volunteer helpers.
+In a perfect world we could depend upon the validity of the system clock, however sometimes users have system clocks which are incorrectly set for a variety of reasons. For example, some users manually change their system clock to artificially extend the length of free software trials. My opinion is that a false timestamp in the logs is just as likely to lead to wasted time from voluntary helpers as having no timestamp at all. Likewise, I opine that the system clock of a major web server such as Google's is more reliable - at least when it comes to the current date and time - than a user's system clock.
 
 If for whatever reason you don't want your computer reaching out to http://google.com when you load the game, you can edit the configuration to either change the remote endpoint used, or altenatively disable remote timestamp acquisition altogether.
 
