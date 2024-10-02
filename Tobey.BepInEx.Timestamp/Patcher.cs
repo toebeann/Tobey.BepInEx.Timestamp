@@ -50,8 +50,8 @@ public static class Patcher
 
         if (remoteEnabled.Value)
         {
-            string[] sources = [remoteEndpoint.Value, (string)remoteEndpoint.DefaultValue];
-            foreach (var endpoint in sources.Distinct())
+            string[] endpoints = [remoteEndpoint.Value, (string)remoteEndpoint.DefaultValue];
+            foreach (var endpoint in endpoints.Distinct())
             {
                 try
                 {
