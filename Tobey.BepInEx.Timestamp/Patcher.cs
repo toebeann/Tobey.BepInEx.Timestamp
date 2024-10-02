@@ -34,7 +34,7 @@ public static class Patcher
             section: "Remote",
             key: "Enabled",
             defaultValue: true,
-            description: "Allow acquiring timestamp from remote endpoints for better accuracy");
+            description: "Allow acquiring timestamp from remote endpoints");
 
         var remoteEndpoint = config.Bind(
             section: "Remote",

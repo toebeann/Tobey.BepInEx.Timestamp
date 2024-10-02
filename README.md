@@ -27,7 +27,7 @@ If you would like to configure the behaviour of remote timestamp acquisition, yo
 ```cfg
 [Remote]
 
-## Allow acquiring timestamp from remote endpoints for better accuracy
+## Allow acquiring timestamp from remote endpoints
 # Setting type: Boolean
 # Default value: true
 Enabled = true
