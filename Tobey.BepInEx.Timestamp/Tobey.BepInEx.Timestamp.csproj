@@ -2,25 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
+    <Version>1.0.1</Version>
     <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Configurations>Release</Configurations>
     <DebugType>none</DebugType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
+  <Target Name="ZipClean" AfterTargets="AfterClean">
+    <Delete Files="..\bin\$(RootNamespace).Mono.zip;$(OutputPath)\zip\BepInEx\patchers\Tobey\$(TargetFileName)" ContinueOnError="true" />
+  </Target>
 
   <Target Name="ZipBuild" AfterTargets="AfterBuild">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
-    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="$(OutputPath)\$(RootNamespace).zip" Overwrite="true" />
+    <MakeDir Directories="..\bin" Condition="!Exists('..\bin')" />
+    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace).Mono.zip" Overwrite="true" />
   </Target>
 
+  <!--<Target Name="ZipBuild" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
+    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="$(OutputPath)\$(RootNamespace).zip" Overwrite="true" />
+  </Target>-->
+
   <ItemGroup>
-    <PackageReference Include="BepInEx.Core" Version="5.4.21" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" />
   </ItemGroup>
+
+  <Import Project="..\Tobey.BepInEx.Timestamp.Shared\Tobey.BepInEx.Timestamp.Shared.projitems" Label="Shared" />
 
 </Project>

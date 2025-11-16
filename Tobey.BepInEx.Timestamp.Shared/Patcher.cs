@@ -1,26 +1,41 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using Mono.Cecil;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+#if IL2CPP
+using BepInEx.Preloader.Core.Patching;
+#else
+using Mono.Cecil;
+using System.Collections.Generic;
+#endif
 
 namespace Tobey.BepInEx.Timestamp;
 
+#if IL2CPP
+[PatcherPluginInfo(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+public class Patcher : BasePatcher
+#else
 public static class Patcher
+#endif
 {
-    // Without the contents of this region, the patcher will not be loaded by BepInEx - do not remove!
+#if !IL2CPP
+    // Without the contents of this region, the patcher will not be loaded by BepInEx 5 - do not remove!
     #region BepInEx Patcher Contract
     public static IEnumerable<string> TargetDLLs { get; } = [];
     public static void Patch(AssemblyDefinition _) { }
     #endregion
+#endif
 
     // entry point - do not delete or rename!
+#if IL2CPP
+    public override void Initialize()
+#else
     public static void Initialize()
+#endif
     {
         using var logger = Logger.CreateLogSource("Timestamp");
         DateTimeOffset now = DateTimeOffset.UtcNow;

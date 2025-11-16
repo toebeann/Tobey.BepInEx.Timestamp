@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>Tobey.BepInEx.Timestamp</AssemblyName>
+    <Version>1.0.1</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>Tobey.BepInEx.Timestamp</RootNamespace>
+    <Configurations>Release</Configurations>
+    <DebugType>none</DebugType>
+    <DefineConstants>$(DefineConstants);IL2CPP</DefineConstants>
+  </PropertyGroup>
+
+  <Target Name="ZipClean" AfterTargets="AfterClean">
+    <Delete Files="..\bin\$(RootNamespace).IL2CPP.zip;$(OutputPath)\zip\BepInEx\patchers\Tobey\$(TargetFileName)" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="ZipBuild" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
+    <MakeDir Directories="..\bin" Condition="!Exists('..\bin')" />
+    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace).IL2CPP.zip" Overwrite="true" />
+  </Target>
+  
+  <ItemGroup>
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="BepInEx.Unity.Mono.Preloader" Version="6.0.0-be.752" />
+  </ItemGroup>
+  
+  <Import Project="..\Tobey.BepInEx.Timestamp.Shared\Tobey.BepInEx.Timestamp.Shared.projitems" Label="Shared" />
+</Project>
