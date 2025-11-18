@@ -18,13 +18,13 @@
   </PropertyGroup>
 
   <Target Name="ZipClean" AfterTargets="AfterClean">
-    <Delete Files="..\bin\$(RootNamespace).IL2CPP.zip;$(OutputPath)\zip\BepInEx\patchers\Tobey\$(TargetFileName)" ContinueOnError="true" />
+    <Delete Files="..\bin\$(RootNamespace)_IL2CPP.zip;$(OutputPath)\zip\BepInEx\patchers\Tobey\$(TargetFileName)" ContinueOnError="true" />
   </Target>
 
   <Target Name="ZipBuild" AfterTargets="AfterBuild">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
     <MakeDir Directories="..\bin" Condition="!Exists('..\bin')" />
-    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace).IL2CPP.zip" Overwrite="true" />
+    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace)_IL2CPP.zip" Overwrite="true" />
   </Target>
   
   <ItemGroup>
