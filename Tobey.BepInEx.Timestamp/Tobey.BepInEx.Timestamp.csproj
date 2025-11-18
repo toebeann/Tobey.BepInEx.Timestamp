@@ -18,11 +18,6 @@
     <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace).Mono.zip" Overwrite="true" />
   </Target>
 
-  <!--<Target Name="ZipBuild" AfterTargets="AfterBuild">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
-    <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="$(OutputPath)\$(RootNamespace).zip" Overwrite="true" />
-  </Target>-->
-
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" />
   </ItemGroup>
