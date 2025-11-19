@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="Tobey.BepInEx.Timestamp.IL2CPP/Tobey.BepInEx.Timestamp.IL2CPP.csproj" />
+  <Project Path="Tobey.BepInEx.Timestamp.Shared/Tobey.BepInEx.Timestamp.Shared.shproj" />
+  <Project Path="Tobey.BepInEx.Timestamp/Tobey.BepInEx.Timestamp.csproj" />
+</Solution>
