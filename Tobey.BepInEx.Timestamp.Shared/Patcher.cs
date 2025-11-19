@@ -59,13 +59,13 @@ public static class Patcher
             section: "Remote",
             key: "Endpoint",
             defaultValue: "http://google.com",
-            description: string.Join(Environment.NewLine,
-                [
-                    "Endpoint URI for remote timestamp acquisition, which will be parsed from the response headers",
-                    "The endpoint's response must contain a \"date\" header in the format: ddd, dd MMM yyyy HH:mm:ss GMT",
-                    "Example: Wed, 02 Oct 2024 12:09:25 GMT",
-                    "HTTPS is not supported"
-                ]));
+            description: """
+                Endpoint URI for remote timestamp acquisition, which will be parsed from the response headers
+                The endpoint's response must contain a "date" header in the format: ddd, dd MMM yyyy HH:mm:ss GMT
+                Example: Wed, 02 Oct 2024 12:09:25 GMT
+                HTTPS is not supported
+                """);
+
         var remoteTimeoutMs = config.Bind(
             section: "Remote",
             key: "Timeout",
