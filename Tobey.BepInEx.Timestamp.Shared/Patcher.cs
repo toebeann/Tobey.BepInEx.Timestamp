@@ -42,9 +42,6 @@ public static class Patcher
         using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
 #endif
 
-        DateTimeOffset now = DateTimeOffset.UtcNow;
-        var source = "local system clock";
-
 #if IL2CPP
         ConfigFile config = Config;
 #else
@@ -75,6 +72,9 @@ public static class Patcher
             key: "Timeout",
             defaultValue: 2_000,
             description: "How long to wait in milliseconds before giving up on the remote endpoint");
+
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        var source = "local system clock";
 
         if (remoteEnabled.Value)
         {
