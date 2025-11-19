@@ -1,4 +1,4 @@
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
 using BepInEx.Logging;
 using System;
 using System.Globalization;
@@ -24,14 +24,12 @@ public static class Patcher
 #endif
 {
 #if !IL2CPP
-    // Without the contents of this region, the patcher will not be loaded by BepInEx 5 - do not remove!
     #region BepInEx Patcher Contract
     public static IEnumerable<string> TargetDLLs { get; } = [];
     public static void Patch(AssemblyDefinition _) { }
     #endregion
 #endif
 
-    // entry point - do not delete or rename!
 #if IL2CPP
     public override void Initialize()
 #else
