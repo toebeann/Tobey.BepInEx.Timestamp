@@ -25,6 +25,9 @@ Just plop the contents of the downloaded .zip from [the releases page](https://g
 If you would like to configure the behaviour of remote timestamp acquisition, you can edit the file `BepInEx` > `config` > `Tobey.BepInEx.Timestamp.cfg`:
 
 ```cfg
+## Settings file was created by plugin Tobey.BepInEx.Timestamp v1.1.0
+## Plugin GUID: Tobey.BepInEx.Timestamp
+
 [Remote]
 
 ## Allow acquiring timestamp from remote endpoints
@@ -39,4 +42,9 @@ Enabled = true
 # Setting type: String
 # Default value: http://google.com
 Endpoint = http://google.com
+
+## How long to wait in milliseconds before giving up on the remote endpoint
+# Setting type: Int32
+# Default value: 2000
+Timeout = 2000
 ```
