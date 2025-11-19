@@ -62,6 +62,11 @@ public static class Patcher
                     "Example: Wed, 02 Oct 2024 12:09:25 GMT",
                     "HTTPS is not supported"
                 ]));
+        var remoteTimeoutMs = config.Bind(
+            section: "Remote",
+            key: "Timeout",
+            defaultValue: 2_000,
+            description: "How long to wait in milliseconds before giving up on the remote endpoint");
 
         if (remoteEnabled.Value)
         {
@@ -70,7 +75,7 @@ public static class Patcher
             {
                 try
                 {
-                    now = GetRemoteTimestamp(endpoint);
+                    now = GetRemoteTimestamp(endpoint, remoteTimeoutMs.Value);
                     source = endpoint;
                     break;
                 }
@@ -89,10 +94,10 @@ public static class Patcher
         Logger.Sources.Remove(logger);
     }
 
-    private static DateTimeOffset GetRemoteTimestamp(string sourceUriString)
+    private static DateTimeOffset GetRemoteTimestamp(string sourceUriString, int timeoutMs)
     {
         var request = (HttpWebRequest)WebRequest.Create(sourceUriString);
-        request.Timeout = 1000;
+        request.Timeout = timeoutMs;
         using var response = request.GetResponse();
 
         return DateTimeOffset.ParseExact(
