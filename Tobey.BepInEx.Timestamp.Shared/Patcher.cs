@@ -1,16 +1,16 @@
-﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 #if IL2CPP
 using BepInEx.Preloader.Core.Patching;
 #else
+using BepInEx;
 using Mono.Cecil;
 using System.Collections.Generic;
+using System.IO;
 #endif
 
 namespace Tobey.BepInEx.Timestamp;
@@ -41,9 +41,13 @@ public static class Patcher
         DateTimeOffset now = DateTimeOffset.UtcNow;
         var source = "local system clock";
 
+#if IL2CPP
+        ConfigFile config = Config;
+#else
         ConfigFile config = new(
             configPath: Path.Combine(Paths.ConfigPath, "Tobey.BepInEx.Timestamp.cfg"),
             saveOnInit: true);
+#endif
 
         var remoteEnabled = config.Bind(
             section: "Remote",
