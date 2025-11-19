@@ -17,7 +17,7 @@ namespace Tobey.BepInEx.Timestamp;
 
 #if IL2CPP
 [PatcherPluginInfo(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-public class Patcher : BasePatcher
+public sealed class Patcher : BasePatcher
 #else
 public static class Patcher
 #endif
