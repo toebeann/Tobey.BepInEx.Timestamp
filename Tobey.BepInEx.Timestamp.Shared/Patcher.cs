@@ -3,14 +3,15 @@ using BepInEx.Logging;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 #if IL2CPP
 using BepInEx.Preloader.Core.Patching;
+using System.Net.Http;
 #else
 using BepInEx;
 using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 #endif
 
 namespace Tobey.BepInEx.Timestamp;
@@ -105,12 +106,19 @@ public static class Patcher
 
     private static DateTimeOffset GetRemoteTimestamp(string sourceUriString, int timeoutMs)
     {
+#if IL2CPP
+        HttpClient client = new() { Timeout = TimeSpan.FromMilliseconds(timeoutMs) };
+        var response = client.GetAsync(sourceUriString).Result;
+        var date = response.Headers.GetValues("date").Single();
+#else
         var request = (HttpWebRequest)WebRequest.Create(sourceUriString);
         request.Timeout = timeoutMs;
         using var response = request.GetResponse();
+        var date = response.Headers["date"];
+#endif
 
         return DateTimeOffset.ParseExact(
-            input: response.Headers["date"],
+            input: date,
             format: "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
             CultureInfo.InvariantCulture.DateTimeFormat,
             DateTimeStyles.AssumeUniversal);
