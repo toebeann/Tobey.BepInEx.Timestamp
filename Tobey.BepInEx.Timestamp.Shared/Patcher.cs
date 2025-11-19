@@ -37,7 +37,12 @@ public static class Patcher
     public static void Initialize()
 #endif
     {
-        using var logger = Logger.CreateLogSource("Timestamp");
+#if IL2CPP
+        ManualLogSource logger = Log;
+#else
+        using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
+#endif
+
         DateTimeOffset now = DateTimeOffset.UtcNow;
         var source = "local system clock";
 
