@@ -36,70 +36,86 @@ public static class Patcher
     public static void Initialize()
 #endif
     {
-#if IL2CPP
-        ManualLogSource logger = Log;
-#else
-        using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
-#endif
-
-#if IL2CPP
-        ConfigFile config = Config;
-#else
-        ConfigFile config = new(
-            configPath: Path.Combine(Paths.ConfigPath, "Tobey.BepInEx.Timestamp.cfg"),
-            saveOnInit: true);
-#endif
-
-        var remoteEnabled = config.Bind(
-            section: "Remote",
-            key: "Enabled",
-            defaultValue: true,
-            description: "Allow acquiring timestamp from remote endpoints");
-
-        var remoteEndpoint = config.Bind(
-            section: "Remote",
-            key: "Endpoint",
-            defaultValue: "http://google.com",
-            description: """
-                Endpoint URI for remote timestamp acquisition, which will be parsed from the response headers
-                The endpoint's response must contain a "date" header in the format: ddd, dd MMM yyyy HH:mm:ss GMT
-                Example: Wed, 02 Oct 2024 12:09:25 GMT
-                HTTPS is not supported
-                """);
-
-        var remoteTimeoutMs = config.Bind(
-            section: "Remote",
-            key: "Timeout",
-            defaultValue: 2_000,
-            description: "How long to wait in milliseconds before giving up on the remote endpoint");
-
-        DateTimeOffset now = DateTimeOffset.UtcNow;
-        var source = "local system clock";
-
-        if (remoteEnabled.Value)
+        try
         {
-            string[] endpoints = [remoteEndpoint.Value, (string)remoteEndpoint.DefaultValue];
-            foreach (var endpoint in endpoints.Distinct())
+#if IL2CPP
+            ManualLogSource logger = Log;
+#else
+            using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
+#endif
+
+#if IL2CPP
+            ConfigFile config = Config;
+#else
+            ConfigFile config = new(
+                configPath: Path.Combine(Paths.ConfigPath, "Tobey.BepInEx.Timestamp.cfg"),
+                saveOnInit: true);
+#endif
+
+            var remoteEnabled = config.Bind(
+                section: "Remote",
+                key: "Enabled",
+                defaultValue: true,
+                description: "Allow acquiring timestamp from remote endpoints");
+
+            var remoteEndpoint = config.Bind(
+                section: "Remote",
+                key: "Endpoint",
+                defaultValue: "http://google.com",
+                description: """
+                    Endpoint URI for remote timestamp acquisition, which will be parsed from the response headers
+                    The endpoint's response must contain a "date" header in the format: ddd, dd MMM yyyy HH:mm:ss GMT
+                    Example: Wed, 02 Oct 2024 12:09:25 GMT
+                    HTTPS is not supported
+                    """);
+
+            var remoteTimeoutMs = config.Bind(
+                section: "Remote",
+                key: "Timeout",
+                defaultValue: 2_000,
+                description: "How long to wait in milliseconds before giving up on the remote endpoint");
+
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+            var source = "local system clock";
+
+            try
             {
-                try
+                if (remoteEnabled.Value)
                 {
-                    now = GetRemoteTimestamp(endpoint, remoteTimeoutMs.Value);
-                    source = endpoint;
-                    break;
+                    string[] endpoints = [remoteEndpoint.Value, (string)remoteEndpoint.DefaultValue];
+                    foreach (var endpoint in endpoints.Distinct())
+                    {
+                        try
+                        {
+                            now = GetRemoteTimestamp(endpoint, remoteTimeoutMs.Value);
+                            source = endpoint;
+                            break;
+                        }
+                        catch
+                        {
+                            logger.LogWarning($"Failed to get remote timestamp from {endpoint}");
+                        }
+                    }
                 }
-                catch
+                else
                 {
-                    logger.LogWarning($"Failed to get remote timestamp from {endpoint}");
+                    logger.LogInfo("Remote timestamp acquisition disabled");
                 }
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogFatal(ex);
+            }
+            finally
+            {
+                logger.LogMessage($"It is currently {now:R} according to {source}");
+#if !IL2CPP
+            Logger.Sources.Remove(logger);
+#endif
             }
         }
-        else
-        {
-            logger.LogInfo("Remote timestamp acquisition disabled");
-        }
-
-        logger.LogMessage($"It is currently {now:R} according to {source}");
-        Logger.Sources.Remove(logger);
+        catch { }
     }
 
     private static DateTimeOffset GetRemoteTimestamp(string sourceUriString, int timeoutMs)
