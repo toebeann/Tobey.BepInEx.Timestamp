@@ -4,6 +4,7 @@
     <TargetFramework>net35</TargetFramework>
     <Version>1.1.0</Version>
     <LangVersion>latest</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Configurations>Release</Configurations>
     <DebugType>none</DebugType>
   </PropertyGroup>
