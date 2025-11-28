@@ -14,7 +14,7 @@
     <RootNamespace>Tobey.BepInEx.Timestamp</RootNamespace>
     <Configurations>Release</Configurations>
     <DebugType>none</DebugType>
-    <DefineConstants>$(DefineConstants);IL2CPP</DefineConstants>
+    <DefineConstants>IL2CPP</DefineConstants>
   </PropertyGroup>
 
   <Target Name="ZipClean" AfterTargets="AfterClean">
