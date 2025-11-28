@@ -6,6 +6,7 @@ using System.Linq;
 #if IL2CPP
 using BepInEx.Preloader.Core.Patching;
 using System.Net.Http;
+using System.Threading.Tasks;
 #else
 using BepInEx;
 using Mono.Cecil;
@@ -31,10 +32,17 @@ public static class Patcher
 #endif
 
 #if IL2CPP
-    public override void Initialize()
+    public override void Initialize() => _ = Run();
 #else
-    public static void Initialize()
+    public static void Initialize() => Run();
 #endif
+
+#if IL2CPP
+    private async Task
+#else
+    private static void
+#endif
+        Run()
     {
         try
         {
@@ -87,7 +95,12 @@ public static class Patcher
                     {
                         try
                         {
-                            now = GetRemoteTimestamp(endpoint, remoteTimeoutMs.Value);
+                            now =
+#if IL2CPP
+                                await
+#endif
+                                GetRemoteTimestamp(endpoint, remoteTimeoutMs.Value);
+
                             source = endpoint;
                             break;
                         }
@@ -101,7 +114,6 @@ public static class Patcher
                 {
                     logger.LogInfo("Remote timestamp acquisition disabled");
                 }
-
             }
             catch (Exception ex)
             {
@@ -111,18 +123,23 @@ public static class Patcher
             {
                 logger.LogMessage($"It is currently {now:R} according to {source}");
 #if !IL2CPP
-            Logger.Sources.Remove(logger);
+                Logger.Sources.Remove(logger);
 #endif
             }
         }
         catch { }
     }
 
-    private static DateTimeOffset GetRemoteTimestamp(string sourceUriString, int timeoutMs)
+#if IL2CPP
+    private static async Task<DateTimeOffset>
+#else
+    private static DateTimeOffset
+#endif
+        GetRemoteTimestamp(string sourceUriString, int timeoutMs)
     {
 #if IL2CPP
         HttpClient client = new() { Timeout = TimeSpan.FromMilliseconds(timeoutMs) };
-        var response = client.GetAsync(sourceUriString).Result;
+        var response = await client.GetAsync(sourceUriString);
         var date = response.Headers.GetValues("date").Single();
 #else
         var request = (HttpWebRequest)WebRequest.Create(sourceUriString);
