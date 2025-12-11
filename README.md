@@ -20,7 +20,7 @@ If for whatever reason you don't want your computer reaching out to http://googl
 
 ## Usage
 
-Just plop the contents of the downloaded .zip from [the releases page](https://github.com/toebeann/Tobey.MLLoader.GameInfo/releases) into your game folder (after installing [BepInEx](https://github.com/BepInEx/BepInEx), of course).
+Just plop the contents of the downloaded .zip from [the releases page](https://github.com/toebeann/Tobey.BepInEx.Timestamp/releases) into your game folder (after installing [BepInEx](https://github.com/BepInEx/BepInEx), of course).
 
 If you would like to configure the behaviour of remote timestamp acquisition, you can edit the file `BepInEx` > `config` > `Tobey.BepInEx.Timestamp.cfg`:
 
