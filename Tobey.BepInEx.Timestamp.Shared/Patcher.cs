@@ -91,7 +91,7 @@ public static class Patcher
             defaultValue: "http://cloudflare.com, http://google.com, http://nist.gov",
             description: """
                 Comma-separated list of HTTP endpoints for remote timestamp acquisition in descending order of preference
-                The timnestamp will be parsed from response headers, which must contain the "date" header in the format:
+                The timestamp will be parsed from response's "date" header, which must be in the format:
                 ddd, dd MMM yyyy HH:mm:ss GMT
                 Example: Wed, 02 Oct 2024 12:09:25 GMT
                 """);
