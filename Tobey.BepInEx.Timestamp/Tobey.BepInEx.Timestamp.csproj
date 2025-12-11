@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net35</TargetFramework>
-    <Version>1.1.1</Version>
+    <TargetFramework>net471</TargetFramework>
+    <Product>Timestamp</Product>
+    <Version>2.0.0</Version>
     <LangVersion>latest</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <RootNamespace>Tobey.BepInEx.Timestamp</RootNamespace>
+    <AssemblyName>Tobey.BepInEx.Timestamp</AssemblyName>
     <Configurations>Release</Configurations>
     <DebugType>none</DebugType>
   </PropertyGroup>
@@ -21,6 +24,10 @@
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" />
+    <PackageReference Include="Costura.Fody" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all" />
+    <PackageReference Include="GuerrillaNtp" Version="3.1.0" PrivateAssets="all" IncludeAssets="compile" />
+    <PackageReference Include="PolyShim" Version="2.4.0" PrivateAssets="all" />
   </ItemGroup>
 
   <Import Project="..\Tobey.BepInEx.Timestamp.Shared\Tobey.BepInEx.Timestamp.Shared.projitems" Label="Shared" />

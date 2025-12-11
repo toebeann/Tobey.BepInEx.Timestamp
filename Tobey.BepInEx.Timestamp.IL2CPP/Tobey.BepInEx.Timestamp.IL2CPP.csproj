@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>Tobey.BepInEx.Timestamp</AssemblyName>
-    <Version>1.1.1</Version>
+    <Product>Timestamp</Product>
+    <Version>2.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -13,6 +13,7 @@
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
     <RootNamespace>Tobey.BepInEx.Timestamp</RootNamespace>
+    <AssemblyName>Tobey.BepInEx.Timestamp</AssemblyName>
     <Configurations>Release</Configurations>
     <DebugType>none</DebugType>
     <DefineConstants>IL2CPP</DefineConstants>
@@ -27,10 +28,13 @@
     <MakeDir Directories="..\bin" Condition="!Exists('..\bin')" />
     <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace)_IL2CPP.zip" Overwrite="true" />
   </Target>
-  
+
   <ItemGroup>
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
     <PackageReference Include="BepInEx.Unity.Mono.Preloader" Version="6.0.0-be.752" />
+    <PackageReference Include="Costura.Fody" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all" />
+    <PackageReference Include="GuerrillaNtp" Version="3.1.0" PrivateAssets="all" IncludeAssets="compile" />
   </ItemGroup>
   
   <Import Project="..\Tobey.BepInEx.Timestamp.Shared\Tobey.BepInEx.Timestamp.Shared.projitems" Label="Shared" />
