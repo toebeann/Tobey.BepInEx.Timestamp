@@ -70,7 +70,7 @@ public static class Patcher
             key: "Endpoints",
             defaultValue: $"time.cloudflare.com, {NtpClient.DefaultHost}:{NtpClient.DefaultPort}, time.google.com, time.nist.gov",
             description: $"""
-                Comma-separated list of NTP endpoints for remote timestamp acquisition in descending order of preference
+                Comma-separated list of NTP endpoints for timestamp acquisition in descending order of preference
                 Endpoints must be valid SNTP/NTP servers
                 Endpoints should be in the format "address[:port]"
                 The port is optional and defaults to {NtpClient.DefaultPort} if not given
@@ -90,7 +90,7 @@ public static class Patcher
             key: "Endpoints",
             defaultValue: "http://cloudflare.com, http://google.com, http://nist.gov",
             description: """
-                Comma-separated list of HTTP endpoints for remote timestamp acquisition in descending order of preference
+                Comma-separated list of HTTP endpoints for timestamp acquisition in descending order of preference
                 The timestamp will be parsed from response's "date" header, which must be in the format:
                 ddd, dd MMM yyyy HH:mm:ss GMT
                 Example: Wed, 02 Oct 2024 12:09:25 GMT
