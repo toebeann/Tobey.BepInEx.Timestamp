@@ -4,19 +4,19 @@ A configurable BepInEx patcher to log the current timestamp.
 
 ## Why?
 
-When troubleshooting, it's useful to know the time and date of the log file you're looking at. Contrary to popular belief, BepInEx does not log this by default - the timestamp at the top of the log file is the timestamp of the modified date of the game's executable, which is still useful but for different reasons.
+When troubleshooting, it's useful to know the time and date of the log file you're looking at. Contrary to popular belief, BepInEx does not log this by default - the timestamp at the top of the log file corresponds to the modified date of the game's executable, which is still useful but for different reasons.
 
-Sometimes, users will be unaware that the log file they're reading is irrelevant because it is from a previous run of the game prior to making changes. Additionally, when users share their log files with helpful folks donating their time to help them out, they have no way of knowing the log file's timestamp, which can often lead to wasted time for all involved.
+Sometimes, users will be unaware that the log file they're reading is irrelevant because it is from a previous run of the game prior to making changes. Additionally, when users share their log files with helpful folks donating their time to help them out, those helpers have no way of knowing the log file's timestamp, which can often lead to wasted time for all involved.
 
 To address this, Tobey.BepInEx.Timestamp prints a UTC timestamp in the logs to make it easier for users and helpers alike to determine whether the log file they're looking at is relevant.
 
 By default, it does this by contacting global NTP (Network Time Protocol) servers commonly used for accurate time synchronisation to retrieve an accurate UTC timestamp. Should this mechanism fail it then pings common global HTTP servers and attempts to parse a UTC timestamp from the HTTP response header, before falling back to the local system clock.
 
-### Why contact a remote servers for the timestamp? Every computer has a system clock, so why not just use it?
+### Why contact a remote server for the timestamp? Every computer has a system clock, so why not just use it?
 
-In a perfect world we could depend upon the validity of the system clock, however sometimes users have system clocks which are incorrectly set for a variety of reasons. For example, some users manually change their system clock to artificially extend the length of free software trials. My opinion is that a false timestamp in the logs is just as likely to lead to wasted time from voluntary helpers as having no timestamp at all.
+In a perfect world we could depend upon the validity of the system clock, however sometimes they are incorrectly set for a variety of reasons. For example, some users manually change their system clock to artificially extend the length of free software trials. My opinion is that a false timestamp in the logs is just as likely to lead to wasted time from helpers as having no timestamp at all.
 
-If for whatever reason you aren't happy with your computer reaching out to remote servers when you load the game, you can edit the configuration to change the endpoints used, or altenatively disable remote timestamp acquisition altogether.
+If for whatever reason you (or your users) aren't happy with your computer reaching out to remote servers for this purpose when you load your game, you can configure the endpoints used, or altenatively disable remote timestamp acquisition altogether.
 
 ## Usage
 
