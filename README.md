@@ -43,7 +43,7 @@ Timeout = 1000
 # Default value: true
 Enabled = true
 
-## Comma-separated list of HTTP endpoints for remote timestamp acquisition in descending order of preference
+## Comma-separated list of HTTP endpoints for timestamp acquisition in descending order of preference
 ## The timestamp will be parsed from the response's "date" header, which must be in the format:
 ## ddd, dd MMM yyyy HH:mm:ss GMT
 ## Example: Wed, 02 Oct 2024 12:09:25 GMT
@@ -59,7 +59,7 @@ Endpoints = http://cloudflare.com, http://google.com, http://nist.gov
 # Default value: true
 Enabled = true
 
-## Comma-separated list of NTP endpoints for remote timestamp acquisition in descending order of preference
+## Comma-separated list of NTP endpoints for remote acquisition in descending order of preference
 ## Endpoints must be valid SNTP/NTP servers
 ## Endpoints should be in the format "address[:port]"
 ## The port is optional and defaults to 123 if not given
