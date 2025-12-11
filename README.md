@@ -14,7 +14,7 @@ By default, it does this by contacting global NTP (Network Time Protocol) server
 
 ### Why contact a remote server for the timestamp? Every computer has a system clock, so why not just use it?
 
-In a perfect world we could depend upon the validity of the system clock, however sometimes they are incorrectly set for a variety of reasons. For example, some users manually change their system clock to artificially extend the length of free software trials. My opinion is that a false timestamp in the logs is just as likely to lead to wasted time from helpers as having no timestamp at all.
+In a perfect world we could depend upon the validity of a user's system clock, however sometimes they are incorrectly set for a variety of reasons. For example, some users manually change their system clock to artificially extend the length of free software trials. My opinion is that a false timestamp in the logs is just as likely to lead to wasted time from helpers as having no timestamp at all.
 
 If for whatever reason you (or your users) aren't happy with your computer reaching out to remote servers for this purpose when you load your game, you can configure the endpoints used, or altenatively disable remote timestamp acquisition altogether.
 
