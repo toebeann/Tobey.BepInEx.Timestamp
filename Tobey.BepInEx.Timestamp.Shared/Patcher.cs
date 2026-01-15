@@ -50,10 +50,10 @@ public static class Patcher
         ManualLogSource logger = Log;
         ConfigFile config = Config;
 #else
-            using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
-            ConfigFile config = new(
-                configPath: Path.Combine(Paths.ConfigPath, "Tobey.BepInEx.Timestamp.cfg"),
-                saveOnInit: true);
+        using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
+        ConfigFile config = new(
+            configPath: Path.Combine(Paths.ConfigPath, "Tobey.BepInEx.Timestamp.cfg"),
+            saveOnInit: true);
 #endif
 
         var ntpEnabled = config.Bind(
