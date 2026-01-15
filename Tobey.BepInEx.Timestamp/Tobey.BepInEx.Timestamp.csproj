@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
     <Product>Timestamp</Product>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
     <LangVersion>latest</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RootNamespace>Tobey.BepInEx.Timestamp</RootNamespace>
@@ -13,21 +13,23 @@
   </PropertyGroup>
 
   <Target Name="ZipClean" AfterTargets="AfterClean">
-    <Delete Files="..\bin\$(RootNamespace)_BepInEx5.zip;$(OutputPath)\zip\BepInEx\patchers\Tobey\$(TargetFileName)" ContinueOnError="true" />
+    <Delete Files="..\bin\$(RootNamespace)_BepInEx5.zip;$(OutputPath)\zip\BepInEx\plugins\Tobey\$(TargetFileName)" ContinueOnError="true" />
   </Target>
 
   <Target Name="ZipBuild" AfterTargets="AfterBuild">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\plugins\Tobey\" />
     <MakeDir Directories="..\bin" Condition="!Exists('..\bin')" />
     <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace)_BepInEx5.zip" Overwrite="true" />
   </Target>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
     <PackageReference Include="Costura.Fody" Version="6.0.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all" />
     <PackageReference Include="GuerrillaNtp" Version="3.1.0" PrivateAssets="all" IncludeAssets="compile" />
     <PackageReference Include="PolyShim" Version="2.4.0" PrivateAssets="all" />
+    <PackageReference Include="UnityEngine.Modules" Version="5.6.0" PrivateAssets="all" />
   </ItemGroup>
 
   <Import Project="..\Tobey.BepInEx.Timestamp.Shared\Tobey.BepInEx.Timestamp.Shared.projitems" Label="Shared" />

@@ -9,6 +9,6 @@
     <Import_RootNamespace>Tobey.BepInEx.Timestamp.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Patcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timestamp.cs" />
   </ItemGroup>
 </Project>

@@ -1,62 +1,58 @@
-﻿using BepInEx.Configuration;
+using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using GuerrillaNtp;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-
 #if IL2CPP
-using BepInEx.Preloader.Core.Patching;
+using System.Threading.Tasks;
+using BaseUnityPlugin = BepInEx.Unity.IL2CPP.BasePlugin;
 #else
-using BepInEx;
-using Mono.Cecil;
-using System.Collections.Generic;
-using System.IO;
+using UnityEngine;
 #endif
 
 namespace Tobey.BepInEx.Timestamp;
 
-#if IL2CPP
-[PatcherPluginInfo(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-public sealed class Patcher : BasePatcher
-#else
-public static class Patcher
-#endif
-{
 #if !IL2CPP
-    #region BepInEx Patcher Contract
-    public static IEnumerable<string> TargetDLLs { get; } = [];
-    public static void Patch(AssemblyDefinition _) { }
-    #endregion
+[DisallowMultipleComponent]
 #endif
+[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+public sealed class Timestamp : BaseUnityPlugin
+{
+    private ManualLogSource logger;
+    private ConfigEntry<bool> ntpEnabled;
+    private ConfigEntry<string> ntpEndpoints;
+    private ConfigEntry<bool> httpEnabled;
+    private ConfigEntry<string> httpEndpoints;
+    private ConfigEntry<int> timeoutMs;
 
 #if IL2CPP
-    public override void Initialize() =>
+    public override void Load()
 #else
-    public static void Initialize() =>
+    private void OnEnable()
 #endif
-        Task.Run(Run);
-
-#if IL2CPP
-    private async Task
-#else
-    private static async Task
-#endif
-        Run()
     {
+        Init();
+
 #if IL2CPP
-        ManualLogSource logger = Log;
-        ConfigFile config = Config;
+        Task.Run(Run);
 #else
-        using ManualLogSource logger = Logger.CreateLogSource("Timestamp");
-        ConfigFile config = new(
-            configPath: Path.Combine(Paths.ConfigPath, "Tobey.BepInEx.Timestamp.cfg"),
-            saveOnInit: true);
+        ThreadingHelper.Instance.StartSyncInvoke(Run);
+#endif
+    }
+
+    private void Init()
+    {
+        logger =
+#if IL2CPP
+            Log;
+#else
+            Logger;
 #endif
 
-        var ntpEnabled = config.Bind(
+        ntpEnabled = Config.Bind(
             section: "NTP",
             key: "Enabled",
             defaultValue: true,
@@ -65,7 +61,7 @@ public static class Patcher
                 When enabled, NTP endpoints take precedence over HTTP endpoints
                 """);
 
-        var ntpEndpoints = config.Bind(
+        ntpEndpoints = Config.Bind(
             section: "NTP",
             key: "Endpoints",
             defaultValue: $"time.cloudflare.com, {NtpClient.DefaultHost}:{NtpClient.DefaultPort}, time.google.com, time.nist.gov",
@@ -76,7 +72,7 @@ public static class Patcher
                 The port is optional and defaults to {NtpClient.DefaultPort} if not given
                 """);
 
-        var httpEnabled = config.Bind(
+        httpEnabled = Config.Bind(
             section: "HTTP",
             key: "Enabled",
             defaultValue: true,
@@ -85,7 +81,7 @@ public static class Patcher
                 When enabled, HTTP endpoints are used as a fallback if NTP endpoints failed or are disabled
                 """);
 
-        var httpEndpoints = config.Bind(
+        httpEndpoints = Config.Bind(
             section: "HTTP",
             key: "Endpoints",
             defaultValue: "http://cloudflare.com, http://google.com, http://nist.gov",
@@ -96,17 +92,26 @@ public static class Patcher
                 Example: Wed, 02 Oct 2024 12:09:25 GMT
                 """);
 
-        var timeoutMs = config.Bind(
+        timeoutMs = Config.Bind(
             section: "General",
             key: "Timeout",
             defaultValue: 1_000,
             description: """
                 How long in milliseconds to wait for a response from each remote endpoint
                 """);
+    }
 
+#if IL2CPP
+    private async Task Run()
+#else
+    private void Run()
+#endif
+    {
         bool remoteTimestampAcquired = false;
         DateTimeOffset now = DateTimeOffset.UtcNow;
         var source = "local system clock";
+
+        Config.Reload();
 
         try
         {
@@ -130,7 +135,12 @@ public static class Patcher
                             };
 
                             var client = new NtpClient(host, TimeSpan.FromMilliseconds(timeoutMs.Value), port);
-                            var clock = await client.QueryAsync();
+                            var clock =
+#if IL2CPP
+                                await client.QueryAsync();
+#else
+                                client.Query();
+#endif
                             now = clock.UtcNow;
                             source = endpoint;
 
@@ -169,7 +179,12 @@ public static class Patcher
                             try
                             {
                                 var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeoutMs.Value) };
-                                var response = await client.GetAsync(endpoint);
+                                var response =
+#if IL2CPP
+                                    await client.GetAsync(endpoint);
+#else
+                                    client.GetAsync(endpoint).Result;
+#endif
                                 var date = response.Headers.GetValues("date").Single();
                                 now = DateTimeOffset.ParseExact(
                                     input: date,
@@ -206,9 +221,6 @@ public static class Patcher
         finally
         {
             logger.LogMessage($"It is currently {now:R} according to {source}");
-#if !IL2CPP
-            Logger.Sources.Remove(logger);
-#endif
         }
     }
 }

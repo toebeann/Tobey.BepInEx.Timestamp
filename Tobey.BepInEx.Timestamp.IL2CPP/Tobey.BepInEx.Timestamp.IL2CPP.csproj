@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Product>Timestamp</Product>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -20,18 +20,18 @@
   </PropertyGroup>
 
   <Target Name="ZipClean" AfterTargets="AfterClean">
-    <Delete Files="..\bin\$(RootNamespace)_IL2CPP.zip;$(OutputPath)\zip\BepInEx\patchers\Tobey\$(TargetFileName)" ContinueOnError="true" />
+    <Delete Files="..\bin\$(RootNamespace)_IL2CPP.zip;$(OutputPath)\zip\BepInEx\plugins\Tobey\$(TargetFileName)" ContinueOnError="true" />
   </Target>
 
   <Target Name="ZipBuild" AfterTargets="AfterBuild">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\patchers\Tobey\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\BepInEx\plugins\Tobey\" />
     <MakeDir Directories="..\bin" Condition="!Exists('..\bin')" />
     <ZipDirectory SourceDirectory="$(OutputPath)\zip\" DestinationFile="..\bin\$(RootNamespace)_IL2CPP.zip" Overwrite="true" />
   </Target>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="BepInEx.Unity.Mono.Preloader" Version="6.0.0-be.752" />
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.752" />
     <PackageReference Include="Costura.Fody" Version="6.0.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all" />
     <PackageReference Include="GuerrillaNtp" Version="3.1.0" PrivateAssets="all" IncludeAssets="compile" />
