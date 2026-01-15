@@ -29,19 +29,12 @@ public sealed class Timestamp : BaseUnityPlugin
     private ConfigEntry<int> timeoutMs;
 
 #if IL2CPP
-    public override void Load()
+    public override void Load() =>
 #else
-    private void OnEnable()
+    private void Awake() =>
 #endif
-    {
         Init();
 
-#if IL2CPP
-        Task.Run(Run);
-#else
-        ThreadingHelper.Instance.StartSyncInvoke(Run);
-#endif
-    }
 
     private void Init()
     {
@@ -99,6 +92,23 @@ public sealed class Timestamp : BaseUnityPlugin
             description: """
                 How long in milliseconds to wait for a response from each remote endpoint
                 """);
+
+#if IL2CPP
+        OnEnable();
+#endif
+    }
+
+    private bool ran;
+    private void OnEnable()
+    {
+        if (ran) Config.Reload();
+        ran = true;
+
+#if IL2CPP
+        Task.Run(Run);
+#else
+        ThreadingHelper.Instance.StartSyncInvoke(Run);
+#endif
     }
 
 #if IL2CPP
@@ -110,8 +120,6 @@ public sealed class Timestamp : BaseUnityPlugin
         bool remoteTimestampAcquired = false;
         DateTimeOffset now = DateTimeOffset.UtcNow;
         var source = "local system clock";
-
-        Config.Reload();
 
         try
         {
